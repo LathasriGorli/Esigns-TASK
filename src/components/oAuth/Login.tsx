@@ -1,33 +1,22 @@
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardTitle } from "../ui/card";
-
-const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
-const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
-const API_BASE = import.meta.env.VITE_PUBLIC_API_URL;
+import { getAuthUrl } from "@/http/services/auth";
 
 export function Login() {
-  const handleLogin = () => {
-    const authUrl = `${API_BASE}/oauth/client-authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
-      REDIRECT_URI
-    )}&scope=create+delete+read+update&state=OAuth`;
-
-    const getUrl = async () => {
-      try{
-      const response = await fetch(authUrl, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!response.ok) throw new Error("Failed to authenticate");
-      const data = await response.json();
-      window.location.href = data.url;
+  const handleLogin = async () => {
+    try {
+      const data = await getAuthUrl();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error("Authorization URL missing in response");
+      }
     } catch (error) {
-      console.error('Login error:', error);
+      toast.error("Failed to get authorization URL");
     }
-    };
-    getUrl();
   };
+
   return (
     <div className="flex items-center justify-center h-screen">
       <Card className="w-[300px] p-4">

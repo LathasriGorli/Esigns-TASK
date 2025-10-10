@@ -1,40 +1,31 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "@tanstack/react-router";
 import dayjs from "dayjs";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
+import { getTemplateByIdAPI } from "@/http/services/template";
 
 export function ViewTemplate() {
   const { id } = useParams({ strict: false });
-  const companyId = import.meta.env.VITE_COMPANY_ID;
   const navigate = useNavigate();
 
   const { data, isLoading, error, isError } = useQuery({
     queryKey: ["template", id],
-    queryFn: async () => {
-      const token = localStorage.getItem("esigns_access_token");
-      const response = await fetch(
-        `${import.meta.env.VITE_PUBLIC_API_URL}/api/company-documents-v2/${id}?company_id=${companyId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!response.ok) throw new Error("Failed to fetch template");
-      return response.json();
-    },
+    queryFn: () => getTemplateByIdAPI(id!),
+    enabled: !!id,
     retry: false,
     refetchOnWindowFocus: false,
   });
 
   if (isLoading) return <div>Loading template...</div>;
-  if (isError) return <div>Error: {error.message}</div>;
+  if (isError) return toast.error(error.message);
+
+  const template = data?.data;
 
   const STYLES = {
     span: "text-neutral-400 text-xs",
     div: "flex flex-col",
-  }
+  };
 
   return (
     <div className="p-4 text-center">
@@ -42,12 +33,16 @@ export function ViewTemplate() {
 
       <div className="border flex flex-col gap-2 w-250 mx-auto p-3 rounded-sm bg-white">
         <div className="flex items-center justify-between">
-          <p>{data.data.title}</p>
+          <p>{template?.title}</p>
           <div className="flex items-center gap-6">
-            <p>{data.data.status}</p>
+            <p>{template?.status}</p>
             <Button
               className="bg-blue-600 text-white hover:bg-blue-600 rounded font-normal p-2 cursor-pointer"
-              onClick={() => navigate({to: `/document-recipient?document_id=${id}`})}
+              onClick={() =>
+                navigate({
+                  to: `/document-recipient?document_id=${template?._id}`,
+                })
+              }
             >
               Document Create
             </Button>
@@ -58,7 +53,7 @@ export function ViewTemplate() {
           <div className={STYLES.div}>
             <span className={STYLES.span}>Created by</span>
             <p className="text-sm">
-              {data.data.user_id.first_name} {data.data.user_id.last_name}
+              {template?.user_id.first_name} {template?.user_id.last_name}
             </p>
           </div>
 
@@ -66,13 +61,13 @@ export function ViewTemplate() {
             <div className={STYLES.div}>
               <span className={STYLES.span}>Created at</span>
               <p className="text-sm">
-                {dayjs(data.data.created_at).format("DD-MM-YYYY HH:mm:ss")}
+                {dayjs(template?.created_at).format("DD-MM-YYYY HH:mm:ss")}
               </p>
             </div>
             <div className={STYLES.div}>
               <span className={STYLES.span}>Last modified</span>
               <p className="text-sm">
-                {dayjs(data.data.updated_at).format("DD-MM-YYYY HH:mm:ss")}
+                {dayjs(template?.updated_at).format("DD-MM-YYYY HH:mm:ss")}
               </p>
             </div>
           </div>

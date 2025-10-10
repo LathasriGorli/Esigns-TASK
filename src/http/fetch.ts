@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import querystring from "query-string";
 import { prepareURLEncodedParams } from "./prepareURLEncodedParams";
 
 interface IAPIResponse {
@@ -7,7 +8,7 @@ interface IAPIResponse {
   data: any;
 }
 class FetchService {
-  authStatusCodes: Array<number> = [401, 403];
+  authStatusCodes: Array<number> = [401, 403, 404, 422, 500];
   authErrorURLs: Array<string> = [
     "/signin",
     "/signup",
@@ -30,8 +31,8 @@ class FetchService {
 
   configureAuthorization(config: any) {
     let accessToken = "";
-    accessToken += Cookies.get("token");
-    config.headers["Authorization"] = accessToken;
+    accessToken += localStorage.getItem("esigns_access_token");
+    config.headers["Authorization"] = "Bearer " + accessToken;
   }
   setHeader(config: any) {
     config.headers = {};
@@ -68,8 +69,8 @@ class FetchService {
         this.authStatusCodes.includes(response.status) &&
         !this.checkToLogOutOrNot(path)
       ) {
-        Cookies.remove("token");
-        window.location.replace("/signin");
+        Cookies.remove("esigns_access_token");
+        // window.location.replace("/");
         throw {
           success: false,
           status: response.status,
@@ -102,6 +103,16 @@ class FetchService {
     return await this.hit(url, {
       method: "POST",
       body: file,
+    });
+  }
+
+  async postUrlEncoded(url: string, payload?: any) {
+    return await this.hit(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: querystring.stringify(payload),
     });
   }
 
