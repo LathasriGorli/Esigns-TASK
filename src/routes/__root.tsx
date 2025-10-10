@@ -1,8 +1,19 @@
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from "sonner";
 import appCss from '../styles.css?url'
 
-const queryclient = new QueryClient();
+const queryclient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      staleTime: 1000 * 60 * 5,
+      retry: false,
+    },
+  },
+});
 
 export const Route = createRootRoute({
   head: () => ({
@@ -48,6 +59,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body className='bg-gray-50'>
         {children}
         <Scripts />
+        <Toaster position='top-center' richColors closeButton/>
       </body>
     </html>
   )

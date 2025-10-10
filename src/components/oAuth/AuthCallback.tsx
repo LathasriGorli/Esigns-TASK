@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import querystring from 'query-string'
 import { useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { GetAllTemplates } from '../templates/GetAllTemplates'
 
 const API_BASE = import.meta.env.VITE_PUBLIC_API_URL
@@ -37,8 +38,8 @@ export function AuthCallback() {
       const data = await response.json()
       localStorage.setItem('esigns_access_token', data.accessToken)
       navigate({ to: '/auth/callback' })
-    } catch (error) {
-      console.error('Token exchange error:', error)
+    } catch (error: any) {
+      toast.error(error.message)
     }
   }
 
@@ -48,3 +49,33 @@ export function AuthCallback() {
     </div>
   )
 }
+
+// import { useEffect } from "react";
+// import { useNavigate } from "@tanstack/react-router";
+// import { GetAllTemplates } from "../templates/GetAllTemplates";
+// import { getAccessToken } from "@/http/services/auth";
+
+// export function AuthCallback() {
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     const code = new URLSearchParams(window.location.search).get("code");
+//     if (code) handleToken(code);
+//   }, []);
+
+//   const handleToken = async (code: string) => {
+//     try {
+//       const data = await getAccessToken(code);
+//       localStorage.setItem("esigns_access_token", data.accessToken);
+//       navigate({ to: "/auth/callback" });
+//     } catch (error) {
+//       console.error("Token exchange error:", error);
+//     }
+//   };
+
+//   return (
+//     <div className="text-center mt-4">
+//       <GetAllTemplates />
+//     </div>
+//   );
+// }
