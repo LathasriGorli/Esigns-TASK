@@ -27,7 +27,7 @@ export function DocumentRecipient({ documentId }: { documentId: string }) {
     refetchOnWindowFocus: false
   });
 
-  const userData = templateData?.data?.data?.user_id;
+  const userData = templateData?.data?.user_id;
 
   const createDocumentMutation = useMutation({
     mutationFn: (payload: any) => sendDocumentAPI(documentId, payload),
@@ -83,13 +83,13 @@ export function DocumentRecipient({ documentId }: { documentId: string }) {
   };
 
   if (isLoading) return <div className="p-4">Loading...</div>;
-
+console.log(userData, 'sjdsh')
   return (
     <div className="p-2 max-w-3xl mx-auto">
       <div className="mb-4">
         <h2 className="text-2xl font-semibold mb-2">Send Document</h2>
         <p className="text-gray-600">
-          Template: {templateData?.data?.data?.title || "Unknown"}
+          Template: {templateData?.data?.title || "Unknown"}
         </p>
       </div>
 
