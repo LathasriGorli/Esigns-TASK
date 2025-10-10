@@ -1,15 +1,14 @@
 import { Button } from "../ui/button";
 import { Card, CardContent, CardTitle } from "../ui/card";
 
-const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
+// const CLIENT_ID = import.meta.env.VITE_CLIENT_ID;
 const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
 const API_BASE = import.meta.env.VITE_PUBLIC_API_URL;
 
 export function Login() {
   const handleLogin = () => {
-    const authUrl = `${API_BASE}/oauth/client-authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
-      REDIRECT_URI
-    )}&scope=create+delete+read+update&state=OAuth`;
+    const authUrl = `https://v2-dev-api.esigns.io/v1.0/oauth/client-authorize?response_type=code&client_id=2d97868e-1db8-43b8-8c3a-b0392178cc71&redirect_uri=http://localhost:3000/auth/callback
+    &scope=create+delete+read+update&state=OAuth`;
 
     const getUrl = async () => {
       try{
