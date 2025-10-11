@@ -28,6 +28,7 @@ export function DocumentRecipient({ documentId }: { documentId: string }) {
   });
 
   const userData = templateData?.data?.user_id;
+  console.log(templateData, 'dhfjh')
 
   const createDocumentMutation = useMutation({
     mutationFn: (payload: any) => sendDocumentAPI(documentId, payload),
@@ -76,14 +77,14 @@ export function DocumentRecipient({ documentId }: { documentId: string }) {
       email_notes: emailNotes,
       document_users: allRecipients,
       enforce_signature_order: false,
-      title: templateData?.data?.data.title,
+      title: templateData?.data?.title,
     };
 
     await createDocumentMutation.mutateAsync(payload);
   };
 
   if (isLoading) return <div className="p-4">Loading...</div>;
-console.log(userData, 'sjdsh')
+
   return (
     <div className="p-2 max-w-3xl mx-auto">
       <div className="mb-4">
