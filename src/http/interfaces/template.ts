@@ -11,6 +11,7 @@ export interface Template {
   export interface Pagination {
     page: number;
     total_pages: number;
+    total: number;
   }
   
   export interface TemplatesResponse {

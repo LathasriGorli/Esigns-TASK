@@ -3,13 +3,13 @@ import type { TemplateResponse, TemplatesResponse } from "../interfaces/template
 
 export const getTemplatesAPI = async (
   page: number,
-  pageSize: number
+  limit: number
 ): Promise<TemplatesResponse> => {
   try {
     const queryParams = {
       company_id: import.meta.env.VITE_COMPANY_ID,
       page,
-      page_size: pageSize,
+      limit,
     };
     const response = await $fetch.get("/api/templates-v2", queryParams);
     const templatesResponse: TemplatesResponse = {
