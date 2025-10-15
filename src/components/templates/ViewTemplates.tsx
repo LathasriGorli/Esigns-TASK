@@ -33,7 +33,7 @@ export function ViewTemplate() {
 
       <div className="border flex flex-col gap-2 w-250 mx-auto p-3 rounded-sm bg-white">
         <div className="flex items-center justify-between">
-          <p>{template?.title}</p>
+          <p className="capitalize">{template?.title}</p>
           <div className="flex items-center gap-6">
             <p>{template?.status}</p>
             <Button

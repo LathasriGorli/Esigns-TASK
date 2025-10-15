@@ -19,13 +19,17 @@ export function DocumentRecipient({ documentId }: { documentId: string }) {
   const [emailSubject, setEmailSubject] = useState("");
   const [emailNotes, setEmailNotes] = useState("");
 
-  const { data: templateData, isLoading } = useQuery({
+  const { data: templateData, isLoading, isError, error:templateError } = useQuery({
     queryKey: ["template", documentId],
     queryFn: () => getDocumentByIdAPI(documentId),
     enabled: !!documentId,
     retry:false,
     refetchOnWindowFocus: false
   });
+
+  if(isError){
+    toast.error(templateError.message);
+  }
 
   const userData = templateData?.data?.user_id;
   console.log(templateData, 'dhfjh')
@@ -89,7 +93,7 @@ export function DocumentRecipient({ documentId }: { documentId: string }) {
     <div className="p-2 max-w-3xl mx-auto">
       <div className="mb-4">
         <h2 className="text-2xl font-semibold mb-2">Send Document</h2>
-        <p className="text-gray-600">
+        <p className="text-gray-600 capitalize">
           Template: {templateData?.data?.title || "Unknown"}
         </p>
       </div>
