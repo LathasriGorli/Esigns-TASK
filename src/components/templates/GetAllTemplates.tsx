@@ -22,7 +22,7 @@ export function GetAllTemplates() {
   })
 
   if (isLoading) return <div>Loading templates...</div>
-  if (isError) return toast.error(error.message)
+  if (isError) return toast.error((error as any).data.error_description)
 
   const templates = data?.data ?? []
   const pagination = data?.pagination

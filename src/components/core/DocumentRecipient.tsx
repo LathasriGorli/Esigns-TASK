@@ -142,14 +142,14 @@ export function DocumentRecipient({ documentId }: { documentId: string }) {
       <div className="flex gap-3 justify-end">
         <Button
           onClick={() => navigate({ to: "/document-recipient" })}
-          className="px-6 py-2 border border-gray-300 rounded hover:bg-gray-50"
+          className="px-6 py-2 border border-gray-300 rounded bg-white text-black hover:bg-gray-50 hover:text-black cursor-pointer"
         >
           Cancel
         </Button>
         <Button
           onClick={handleSendDocument}
           disabled={createDocumentMutation.isPending}
-          className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded disabled:opacity-50"
+          className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded disabled:opacity-50 cursor-pointer"
         >
           {createDocumentMutation.isPending ? "Sending..." : "Send Document"}
         </Button>
